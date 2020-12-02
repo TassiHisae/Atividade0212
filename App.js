@@ -1,21 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import SubjectList from './Pages/Subject/SubjectList';
+import SubjectDetails from './Pages/Subject/SubjectDetails';
+import Home from './Pages/Home/Home';
 
 export default function App() {
+  const Stack = createStackNavigator();
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+      >
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false, }} />
+        <Stack.Screen name="Matérias" component={SubjectList} options={styles} />
+        <Stack.Screen name="Detalhes" component={SubjectDetails} options={({ route }) => {
+          const subjectName = `${route.params.subject.name}`;
+          return ({
+            title: subjectName,
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+            headerBackTitleStyle: styles.headerBackTitleStyle
+          });
+        }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const styles = {
+  headerStyle: {
+    backgroundColor: "purple",
   },
-});
+
+  headerTitleStyle: {
+    fontSize: 20,
+    color: '#ffff',
+  },
+  headerBackTitleStyle: {
+    color: '#ffff'
+  }
+}
